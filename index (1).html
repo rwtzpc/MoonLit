@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MoonLit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#050818;--bg2:#121a46;--glass:rgba(255,255,255,.06);--edge:rgba(190,200,255,.18);--ink:#eef0ff;--mute:#9aa6d8;--glow:#c9b8ff;--moon:#fff3cf;--n1:rgba(120,80,255,.4);--n2:rgba(40,170,255,.28);--n3:rgba(255,80,180,.2);color-scheme:dark}
+:root[data-theme="light"]{--bg:#ffd9a8;--bg2:#9fd3ff;--glass:rgba(255,255,255,.55);--edge:rgba(120,70,160,.25);--ink:#2b1f45;--mute:#5d4a78;--glow:#7a3cff;--moon:#ffb02e;--n1:rgba(255,200,120,.6);--n2:rgba(255,140,170,.4);--n3:rgba(255,255,255,.5);color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:"Outfit","Trebuchet MS",system-ui,sans-serif;line-height:1.55;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 70%) fixed;padding-bottom:env(safe-area-inset-bottom,0px);transition:background .6s}
+.neb{position:fixed;inset:-25%;z-index:0;pointer-events:none;filter:blur(24px);background:radial-gradient(40% 35% at 20% 30%,var(--n1),transparent 70%),radial-gradient(35% 30% at 80% 20%,var(--n2),transparent 70%),radial-gradient(45% 40% at 60% 85%,var(--n3),transparent 70%);animation:drift 45s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(4%,3%) rotate(8deg) scale(1.1)}}
+.hz{position:fixed;left:0;right:0;bottom:0;height:35vh;z-index:0;pointer-events:none;background:linear-gradient(0deg,var(--n1),transparent)}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;transition:opacity .8s}
+:root[data-theme="light"] #sky{opacity:0}
+.clouds{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .8s;overflow:hidden}
+:root[data-theme="light"] .clouds{opacity:1}
+.clouds i{position:absolute;left:-30%;width:300px;height:70px;border-radius:70px;background:rgba(255,255,255,.75);filter:blur(10px);animation:fly 70s linear infinite}
+.clouds i:nth-child(1){top:12%}.clouds i:nth-child(2){top:38%;width:420px;animation-duration:110s;animation-delay:-40s}.clouds i:nth-child(3){top:68%;animation-duration:90s;animation-delay:-70s}
+@keyframes fly{to{transform:translateX(160vw)}}
+.wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:0 18px 50px}
+header{text-align:center;padding:calc(env(safe-area-inset-top,0px) + 46px) 0 20px}
+.orb{position:relative;width:clamp(110px,22vw,170px);aspect-ratio:1;margin:0 auto;color:var(--moon);filter:drop-shadow(0 0 28px var(--moon)) drop-shadow(0 0 80px var(--glow));animation:bob 7s ease-in-out infinite}
+.orb svg{position:absolute;inset:0;width:100%;height:100%;transition:opacity .7s,transform .9s cubic-bezier(.3,1.3,.5,1)}
+.sun{opacity:0;transform:rotate(-120deg) scale(.3)}
+:root[data-theme="light"] .sun{opacity:1;transform:none}
+:root[data-theme="light"] .moon{opacity:0;transform:rotate(120deg) scale(.3)}
+.rays{transform-origin:50px 50px;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{50%{transform:translateY(-10px)}}
+h1{margin:14px 0 4px;font-size:clamp(2.6rem,9vw,5rem);font-weight:800;letter-spacing:-.03em;line-height:1;background:linear-gradient(180deg,#fff,var(--glow));-webkit-background-clip:text;background-clip:text;color:transparent}
+:root[data-theme="light"] h1{background:linear-gradient(180deg,#4b2a8f,#c04ad8);-webkit-background-clip:text;background-clip:text}
+.sub{color:var(--mute);margin:0;font-size:1.1rem}
+nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:5;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:10px;margin:18px 0 6px;background:var(--glass);border:1px solid var(--edge);border-radius:22px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+nav button,nav a{font:inherit;font-size:.9rem;color:var(--ink);background:transparent;border:1px solid transparent;border-radius:999px;padding:7px 13px;cursor:pointer;text-decoration:none;transition:background .2s,box-shadow .2s}
+nav button:hover,nav a:hover{background:var(--glass);border-color:var(--edge);box-shadow:0 0 18px -2px var(--glow)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--glow);outline-offset:2px}
+#q{flex:1 1 180px;max-width:260px;font:inherit;padding:8px 16px;border-radius:999px;border:1px solid var(--edge);background:rgba(0,0,0,.18);color:var(--ink)}
+#q::placeholder{color:var(--mute)}
+.hi{text-align:center;color:var(--glow);min-height:1.6em;margin:10px 0 0;font-weight:600}
+h2{display:flex;align-items:center;gap:14px;margin:38px 0 16px;font-size:1.4rem;font-weight:600}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--edge),transparent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:18px}
+.cw{position:relative}
+.card{width:100%;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:center}
+.art{position:relative;display:block;aspect-ratio:1;border-radius:26px;overflow:hidden;border:1px solid var(--edge);box-shadow:0 10px 26px -12px #000;transition:transform .25s,box-shadow .25s}
+.art::before{content:"";position:absolute;width:70%;aspect-ratio:1;border-radius:50%;right:-22%;top:-22%;background:rgba(255,255,255,.16)}
+.art::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 25% 15%,rgba(255,255,255,.35),transparent 50%)}
+.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.art b{position:absolute;inset:0;display:grid;place-items:center;font-size:3rem;font-weight:800;color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.4);z-index:1}
+.card:hover .art,.card:focus-visible .art{transform:translateY(-6px) scale(1.04);box-shadow:0 18px 36px -10px var(--c),0 0 0 2px var(--glow)}
+.card .n{display:block;margin-top:9px;font-size:.88rem;color:var(--mute)}
+.card:hover .n{color:var(--ink)}
+.about{margin:56px auto 0;max-width:720px;padding:26px 30px;background:var(--glass);border:1px solid var(--edge);border-radius:26px;color:var(--mute);font-size:.95rem}
+.about h3{margin:0 0 4px;color:var(--ink)}.about p{margin:0 0 14px}
+footer{text-align:center;margin-top:30px;font-size:.82rem;color:var(--mute)}
+dialog{border:1px solid var(--edge);border-radius:24px;background:var(--bg2);color:var(--ink);padding:26px;width:min(380px,92vw);box-shadow:0 0 80px -10px var(--glow)}
+dialog::backdrop{background:rgba(3,5,18,.75);backdrop-filter:blur(4px)}
+dialog input,dialog textarea{width:100%;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--edge);background:rgba(0,0,0,.25);color:var(--ink);margin:6px 0 14px}
+dialog textarea{height:150px;font:13px/1.4 ui-monospace,Menlo,monospace;resize:vertical}
+dialog .row{display:flex;justify-content:flex-end;gap:8px}
+dialog button{font:inherit;padding:8px 18px;border-radius:999px;border:1px solid var(--edge);background:transparent;color:var(--ink);cursor:pointer}
+dialog button.ok{background:var(--glow);color:#10142b;border-color:var(--glow);font-weight:700}
+dialog small{color:var(--mute)}
+#player{width:min(1100px,97vw);height:min(760px,92vh);padding:0;overflow:hidden}
+#player[open]{display:flex;flex-direction:column}
+#player .bar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px}
+#player iframe{flex:1;border:0;background:#000;width:100%}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="neb"></div><div class="hz"></div>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="wrap">
+<header>
+  <div class="orb" role="img" aria-label="MoonLit logo">
+    <svg class="moon" viewBox="0 0 100 100"><defs><mask id="m"><rect width="100" height="100" fill="#fff"/><circle cx="64" cy="40" r="33" fill="#000"/></mask></defs>
+      <circle cx="48" cy="54" r="40" fill="currentColor" mask="url(#m)"/>
+      <path d="M70 22c3 9 9 15 18 18-9 3-15 9-18 18-3-9-9-15-18-18 9-3 15-9 18-18z" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+    <svg class="sun" viewBox="0 0 100 100"><circle cx="50" cy="50" r="22" fill="currentColor"/>
+      <g class="rays" stroke="currentColor" stroke-width="5" stroke-linecap="round" id="rays"></g></svg>
+  </div>
+  <h1>MoonLit</h1>
+  <p class="sub">Play, learn and unwind after dark.</p>
+</header>
+
+<nav aria-label="Control panel">
+  <input id="q" type="search" placeholder="Search games" aria-label="Search games">
+  <button id="rand">Random game</button>
+  <button id="theme">Night / day</button>
+  <button id="nameBtn">Change username</button>
+  <button id="panic" title="Press ` any time">Panic key (`)</button>
+</nav>
+<p class="hi" id="hello"></p>
+
+<h2 id="mine">Games</h2><div class="grid" id="mineGrid"></div>
+
+<section class="about">
+  <h3>Welcome to MoonLit</h3>
+  <p>A calm place to play quick games when the day is done. Browse, pick a random game, or search for something specific.</p>
+  <h3>Make it yours</h3>
+  <p>Set a username, switch between night and day, and press the ` key any time to jump to Google.</p>
+</section>
+<footer>&copy; 2026 MoonLit</footer>
+</div>
+
+<dialog id="dlg">
+  <label for="u">Enter your username:</label>
+  <input id="u" maxlength="24" autocomplete="off">
+  <div class="row"><button id="cancel">Cancel</button><button class="ok" id="ok">OK</button></div>
+</dialog>
+
+<dialog id="player">
+  <div class="bar"><strong id="pt"></strong><span><a id="po" href="#" target="_blank" rel="noopener" style="color:var(--glow);margin-right:14px">Open in new tab</a><button id="pc">Close</button></span></div>
+  <iframe id="pf" allowfullscreen sandbox="allow-scripts allow-pointer-lock" title="Game"></iframe>
+</dialog>
+
+<script>
+/* ===== GAMES: one object per game: {name, img (picture), url (a web page to embed) OR html (game code)} ===== */
+const GAMES=[
+ {name:"Slope",img:"icons/slope.jpg",url:"slope/"},
+ {name:"1v1.LOL",img:"icons/1v1.jpg",url:"1v1/"},
+ {name:"World's Hardest Game",img:"icons/whg.jpg",url:"worldshardestgame/"},
+ {name:"Chess",img:"icons/chess.jpg",url:"chess/"},
+ {name:"2048",img:"icons/2048.jpg",url:"2048/"},
+ {name:"Tic Tac Toe",img:"icons/tictactoe.jpg",url:"tic-tac-toe/"}
+];
+/* ========================================================================= */
+const $=id=>document.getElementById(id),root=document.documentElement;
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let user=store.get("ml-user");
+if(store.get("ml-theme"))root.dataset.theme=store.get("ml-theme");
+
+/* sun rays */
+$("rays").innerHTML=Array.from({length:12},(_,i)=>`<line x1="50" y1="12" x2="50" y2="2" transform="rotate(${i*30} 50 50)"/>`).join("");
+
+/* username */
+const greet=()=>{$("hello").textContent=user?"Welcome back, "+user:""};greet();
+$("nameBtn").onclick=()=>{$("u").value=user||"";$("dlg").showModal();$("u").focus()};
+$("cancel").onclick=()=>$("dlg").close();
+$("ok").onclick=()=>{user=$("u").value.trim();store.set("ml-user",user);greet();$("dlg").close()};
+$("u").onkeydown=e=>{if(e.key==="Enter")$("ok").click()};
+if(!user)setTimeout(()=>$("nameBtn").click(),500);
+
+/* tiles */
+function tile(n,i,onOpen,img){
+ const w=document.createElement("div");w.className="cw";
+ const h=(i*47+230)%360,c=`hsl(${h} 80% 55%)`;w.style.setProperty("--c",c);
+ w.innerHTML=`<button class="card" data-n="${n.toLowerCase().replace(/"/g,"")}"><span class="art" style="background:linear-gradient(145deg,${c},hsl(${(h+55)%360} 70% 28%))"><b></b></span><span class="n"></span></button>`;
+ w.querySelector("b").textContent=n[0]||"?";w.querySelector(".n").textContent=n;
+ if(img){const im=document.createElement("img");im.src=img;im.alt="";w.querySelector(".art").appendChild(im)}
+ w.querySelector(".card").onclick=onOpen;
+ return w}
+function play(g){$("pt").textContent=g.name;const f=$("pf");
+ if(g.url){f.setAttribute("sandbox","allow-scripts allow-same-origin allow-pointer-lock allow-popups");f.removeAttribute("srcdoc");f.src=g.url;$("po").href=g.url;$("po").hidden=false}
+ else{f.setAttribute("sandbox","allow-scripts allow-pointer-lock");f.removeAttribute("src");f.srcdoc=g.html;$("po").hidden=true}
+ $("player").showModal()}
+$("pc").onclick=()=>$("player").close();
+$("player").onclose=()=>{$("pf").removeAttribute("srcdoc");$("pf").src="about:blank"};
+
+
+function renderMine(){const g=$("mineGrid");g.innerHTML="";
+ GAMES.forEach((x,i)=>g.appendChild(tile(x.name,i+3,()=>play(x),x.img)));
+ if(!GAMES.length){g.hidden=true;$("mine").hidden=true}}
+renderMine();
+
+/* search / random / theme */
+$("q").oninput=()=>{const v=$("q").value.trim().toLowerCase();document.querySelectorAll(".cw").forEach(t=>{const c=t.querySelector(".card");t.style.display=c.dataset.n.includes(v)?"":"none"})};
+$("rand").onclick=()=>{const t=[...document.querySelectorAll(".cw .card")];t[Math.floor(Math.random()*t.length)].click()};
+$("theme").onclick=()=>{const l=root.dataset.theme==="light"?"dark":"light";root.dataset.theme=l;store.set("ml-theme",l)};
+
+/* panic key: ` goes to Google, from anywhere */
+const away=()=>location.replace("https://www.google.com");
+$("panic").onclick=away;
+addEventListener("keydown",e=>{if(e.code==="Backquote"||e.key==="`"){e.preventDefault();away()}},true);
+
+/* starfield with depth and mouse parallax */
+const cv=$("sky"),cx=cv.getContext("2d"),calm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+let W,H,S=[],sh=null,mx=0,my=0;
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;S=Array.from({length:Math.round(W*H/5500)},()=>{const d=Math.random();return{x:Math.random()*W,y:Math.random()*H,d,r:d*1.5+.3,p:Math.random()*6.28,s:Math.random()*.02+.005,c:d>.8?"#ffe9b0":d<.3?"#b8c8ff":"#fff"}})}
+addEventListener("pointermove",e=>{mx=e.clientX/W-.5;my=e.clientY/H-.5});
+function draw(){cx.clearRect(0,0,W,H);
+ for(const s of S){s.p+=s.s;cx.globalAlpha=.3+.7*Math.abs(Math.sin(s.p));cx.fillStyle=s.c;cx.beginPath();cx.arc((s.x-mx*s.d*30+W)%W,(s.y-my*s.d*30+H)%H,s.r,0,6.28);cx.fill()}
+ if(!sh&&!calm&&Math.random()<.005)sh={x:Math.random()*W*.8,y:Math.random()*H*.35,l:0};
+ if(sh){sh.x+=10;sh.y+=4.5;sh.l++;const g=cx.createLinearGradient(sh.x,sh.y,sh.x-110,sh.y-48);g.addColorStop(0,"#fff");g.addColorStop(1,"transparent");cx.globalAlpha=1-sh.l/50;cx.strokeStyle=g;cx.lineWidth=2;cx.beginPath();cx.moveTo(sh.x,sh.y);cx.lineTo(sh.x-110,sh.y-48);cx.stroke();if(sh.l>50)sh=null}
+ if(!calm)requestAnimationFrame(draw)}
+addEventListener("resize",()=>{size();if(calm)draw()});size();draw();
+</script>
+</body>
+</html>
